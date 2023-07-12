@@ -1,0 +1,141 @@
+G.Auto_Fram = false
+_G.Instant_Kill = false
+
+_G.MonsterSelect = "Lower Moon Demon 4"
+
+_G.Tool = "Combat"
+
+_G.Mode = "Above" -- Above, Behide, Under
+_G.Distance = 5
+
+
+while _G.Auto_Fram == true do task.wait()
+	pcall(function()
+		if game:GetService("Players").LocalPlayer.Quest.Num.Value ~= 10 and game:GetService("Players").LocalPlayer.Quest.Num.Value ~= 0 then
+			game:GetService("Players").LocalPlayer.PlayerGui.QuestBar.ingame.quest["1"].RemoteEvent:FireServer()
+		elseif game:GetService("Players").LocalPlayer.Quest.Num.Value == 10 then
+			for i, v in pairs(game:GetService("Workspace").CharactersAndNPCs:GetChildren()) do
+				if not game:GetService("Players"):FindFirstChild(v.Name) and v.Name == _G.MonsterSelect and v.Humanoid.Health > 0 then
+					repeat task.wait()
+						if _G.Mode == "Above" then
+							game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0, _G.Distance, 0) * CFrame.fromOrientation(300, 0 ,0)
+						elseif _G.Mode == "Behind" then
+							game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0, 0, (_G.Distance - _G.Distance * 2))
+						elseif _G.Mode == "Under" then
+							game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0, (_G.Distance - _G.Distance * 2), 0) * CFrame.fromOrientation(900, 0, 0)
+						end
+
+
+						setfflag("HumanoidParallelRemoveNoPhysics", "False")
+						setfflag("HumanoidParallelRemoveNoPhysicsNoSimulate2", "False")
+						game:GetService("Players").LocalPlayer.Character.Humanoid:ChangeState(11)
+
+
+						if not game:GetService("Players").LocalPlayer.Character:FindFirstChild(_G.Tool) then
+							game:GetService("Players").LocalPlayer.Character.Humanoid:EquipTool(game:GetService("Players").LocalPlayer.Backpack[_G.Tool])
+						else	
+							game:GetService("ReplicatedStorage").Remotes.Attack:FireServer("M1", _G.Tool, false)
+						end
+					until _G.Auto_Fram == false or v.Humanoid.Health == 0 or game:GetService("Players").LocalPlayer.Character.Humanoid.Health == 0
+				end
+			end
+		elseif game:GetService("Players").LocalPlayer.Quest.Num.Value == 0 then
+			game:GetService("ReplicatedStorage").Events.QuestTake:FireServer("10","1","??? YEN, ??? XP","Nerd Ware","It Real Lower 4?")
+		end
+	end)
+end
+
+
+while _G.Instant_Kill == true do task.wait()
+	pcall(function()
+		for i, v in pairs(game:GetService("Workspace").CharactersAndNPCs:GetChildren()) do
+			if v.ClassName == "Model" and v:FindFirstChild("Killers") and v.Killers:FindFirstChild(game:GetService("Players").LocalPlayer.Name) and (game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude < 15 then
+				v.Humanoid.Health = 0
+			end
+		end
+	end)
+end
+
+local lib = loadstring(game:HttpGet"https://raw.githubusercontent.com/dawid-scripts/UI-Libs/main/Vape.txt")()
+
+local win = lib:Window("Nerdware",Color3.fromRGB(199, 199, 199), Enum.KeyCode.RightControl)
+
+local tab = win:Tab("Main")
+local tab2 = win:Tab ("Player")
+local tab3 = win:Tab ("Misc")
+local tab4 = win:Tab("Credits")
+
+
+--[[tab:Button("Button", function()
+	lib:Notification("Notification", "Hello!", "Hi!")
+end)]]
+
+--[[tab:Toggle("Auto Farm Chests",false, function(t)
+	print(t)
+end)]]
+
+tab:Toggle("Auto Farm",false, function(t)
+	if t == false then
+		t = true
+		_G.Auto_Fram = true
+	else
+		t = false
+		_G.Auto_Fram = false
+	end
+end)
+
+tab:Dropdown("Auto Farm Mode",{"Above","Behind","Under"}, function(t)
+	_G.Mode = t
+end)
+
+tab:Toggle("Insta Kill",false, function(t)
+	if t == false then
+		t = true
+		_G.Instant_Kill = true
+	else
+		t = false
+		_G.Instant_Kill = false
+	end
+end)
+
+tab4:Label("(Rick Astley) - Owner")
+tab4:Label("(zuwy_) - Scripter")
+tab4:Label("(Epik) - Scripter")
+tab4:Label("(Hisoka) - Scripter")
+tab4:Label("(Clipz) - Scripter")
+
+
+--[[tab:Slider("Slider",0,100,30, function(t)
+	print(t)
+end)]]
+
+--[[tab:Dropdown("Dropdown",{"Option 1","Option 2","Option 3","Option 4","Option 5"}, function(t)
+	print(t)
+end)]]
+
+--[[tab3:Colorpicker("Colorpicker",Color3.fromRGB(255, 255, 255), function(t)
+	print(t)
+end)]]
+
+tab2:Textbox("WalkSpeed",true, function(t)
+	print(t)
+	game.Players.LocalPlayer.Character:WaitForChild("Humanoid").WalkSpeed = t
+end)
+
+tab2:Textbox("JumpPower",true, function(t)
+	print(t)
+	game.Players.LocalPlayer.Character:WaitForChild("Humanoid").JumpPower = t
+end)
+
+
+--[[tab:Bind("Bind",Enum.KeyCode.RightShift, function()
+	print("Pressed!")
+end)]]
+
+--tab:Label("Label")
+
+tab2:Colorpicker("Change UI Color",Color3.fromRGB(199, 199, 199), function(t)
+	lib:ChangePresetColor(Color3.fromRGB(t.R * 255, t.G * 255, t.B * 255))
+end)
+
+lib:Notification("Nerdware", "Support: https://dsc.gg/nerdware", "Noted")
