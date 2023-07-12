@@ -1,28 +1,28 @@
-G.Auto_Fram = false
-_G.Instant_Kill = false
+local Auto_Fram = false
+local Instant_Kill = false
 
-_G.MonsterSelect = "Lower Moon Demon 4"
+local MonsterSelect = "Lower Moon Demon 4"
 
-_G.Tool = "Combat"
+local Tool = "Combat"
 
-_G.Mode = "Above" -- Above, Behide, Under
-_G.Distance = 5
+local Mode = "Above" -- Above, Behide, Under
+local Distance = 5
 
 
-while _G.Auto_Fram == true do task.wait()
+while Auto_Fram == true do task.wait()
 	pcall(function()
 		if game:GetService("Players").LocalPlayer.Quest.Num.Value ~= 10 and game:GetService("Players").LocalPlayer.Quest.Num.Value ~= 0 then
 			game:GetService("Players").LocalPlayer.PlayerGui.QuestBar.ingame.quest["1"].RemoteEvent:FireServer()
 		elseif game:GetService("Players").LocalPlayer.Quest.Num.Value == 10 then
 			for i, v in pairs(game:GetService("Workspace").CharactersAndNPCs:GetChildren()) do
-				if not game:GetService("Players"):FindFirstChild(v.Name) and v.Name == _G.MonsterSelect and v.Humanoid.Health > 0 then
+				if not game:GetService("Players"):FindFirstChild(v.Name) and v.Name == MonsterSelect and v.Humanoid.Health > 0 then
 					repeat task.wait()
-						if _G.Mode == "Above" then
+						if Mode == "Above" then
 							game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0, _G.Distance, 0) * CFrame.fromOrientation(300, 0 ,0)
-						elseif _G.Mode == "Behind" then
-							game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0, 0, (_G.Distance - _G.Distance * 2))
-						elseif _G.Mode == "Under" then
-							game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0, (_G.Distance - _G.Distance * 2), 0) * CFrame.fromOrientation(900, 0, 0)
+						elseif Mode == "Behind" then
+							game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0, 0, (Distance - Distance * 2))
+						elseif Mode == "Under" then
+							game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0, (Distance - Distance * 2), 0) * CFrame.fromOrientation(900, 0, 0)
 						end
 
 
@@ -31,12 +31,12 @@ while _G.Auto_Fram == true do task.wait()
 						game:GetService("Players").LocalPlayer.Character.Humanoid:ChangeState(11)
 
 
-						if not game:GetService("Players").LocalPlayer.Character:FindFirstChild(_G.Tool) then
-							game:GetService("Players").LocalPlayer.Character.Humanoid:EquipTool(game:GetService("Players").LocalPlayer.Backpack[_G.Tool])
+						if not game:GetService("Players").LocalPlayer.Character:FindFirstChild(Tool) then
+							game:GetService("Players").LocalPlayer.Character.Humanoid:EquipTool(game:GetService("Players").LocalPlayer.Backpack[Tool])
 						else	
-							game:GetService("ReplicatedStorage").Remotes.Attack:FireServer("M1", _G.Tool, false)
+							game:GetService("ReplicatedStorage").Remotes.Attack:FireServer("M1", Tool, false)
 						end
-					until _G.Auto_Fram == false or v.Humanoid.Health == 0 or game:GetService("Players").LocalPlayer.Character.Humanoid.Health == 0
+					until Auto_Fram == false or v.Humanoid.Health == 0 or game:GetService("Players").LocalPlayer.Character.Humanoid.Health == 0
 				end
 			end
 		elseif game:GetService("Players").LocalPlayer.Quest.Num.Value == 0 then
@@ -46,7 +46,7 @@ while _G.Auto_Fram == true do task.wait()
 end
 
 
-while _G.Instant_Kill == true do task.wait()
+while Instant_Kill == true do task.wait()
 	pcall(function()
 		for i, v in pairs(game:GetService("Workspace").CharactersAndNPCs:GetChildren()) do
 			if v.ClassName == "Model" and v:FindFirstChild("Killers") and v.Killers:FindFirstChild(game:GetService("Players").LocalPlayer.Name) and (game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude < 15 then
@@ -77,24 +77,24 @@ end)]]
 tab:Toggle("Auto Farm",false, function(t)
 	if t == false then
 		t = true
-		_G.Auto_Fram = true
+		Auto_Fram = true
 	else
 		t = false
-		_G.Auto_Fram = false
+		Auto_Fram = false
 	end
 end)
 
 tab:Dropdown("Auto Farm Mode",{"Above","Behind","Under"}, function(t)
-	_G.Mode = t
+	Mode = t
 end)
 
 tab:Toggle("Insta Kill",false, function(t)
 	if t == false then
 		t = true
-		_G.Instant_Kill = true
+		Instant_Kill = true
 	else
 		t = false
-		_G.Instant_Kill = false
+		Instant_Kill = false
 	end
 end)
 
